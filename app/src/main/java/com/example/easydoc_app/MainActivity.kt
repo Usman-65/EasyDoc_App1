@@ -37,7 +37,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
-//erstellung des Projektes
+//erstellung des Projekt
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
