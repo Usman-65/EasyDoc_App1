@@ -1,6 +1,8 @@
 package com.example.easydoc_app
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,7 +23,7 @@ class MainActivity : ComponentActivity() {
             EasyDoc_AppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Willkommen",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -33,15 +35,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "Hallo $name!",
         modifier = modifier
     )
 }
-//erstellung des Projekt
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     EasyDoc_AppTheme {
-        Greeting("Android")
+        Greeting("User")
     }
 }
