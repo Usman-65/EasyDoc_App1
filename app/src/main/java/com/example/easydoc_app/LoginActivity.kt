@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.mindrot.jbcrypt.BCrypt
 
 class LoginActivity : AppCompatActivity() {
 
@@ -25,28 +26,6 @@ class LoginActivity : AppCompatActivity() {
         registerLink = findViewById(R.id.registerLink)
 
         loginButton.setOnClickListener {
-            val userEmail = email.text.toString().trim()
-            val userPassword = password.text.toString().trim()
-
-            when {
-                userEmail.isEmpty() -> {
-                    Toast.makeText(this, "E-Mail darf nicht leer sein!", Toast.LENGTH_SHORT).show()
-                }
-                userPassword.isEmpty() -> {
-                    Toast.makeText(this, "Passwort darf nicht leer sein!", Toast.LENGTH_SHORT).show()
-                }
-                !userEmail.contains("@") || !userEmail.contains(".") -> {
-                    Toast.makeText(this, "Bitte eine gültige E-Mail-Adresse eingeben!", Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    // Hier könnte die Login-Logik kommen (z. B. API-Call)
-                    Toast.makeText(this, "Login erfolgreich!", Toast.LENGTH_SHORT).show()
-                    // Intent für die Weiterleitung nach erfolgreichem Login
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }
         }
 
         registerLink.setOnClickListener {
@@ -54,4 +33,36 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    private fun handleLogin() {
+        val userEmail = email.text.toString().trim()
+        val userPassword = password.text.toString().trim()
+
+        if (userEmail.isEmpty()) {
+            showToast("E-Mail darf nicht leer sein!")
+            return
+        }
+
+        if (userPassword.isEmpty()) {
+            showToast("Passwort darf nicht leer sein!")
+            return
+        }
+
+        val sharedPref = getSharedPreferences("user_data", MODE_PRIVATE)
+        val savedEmail = sharedPref.getString("email", null)
+        val savedHashedPassword = sharedPref.getString("password", null)
+
+        if (savedEmail == userEmail && savedHashedPassword != null && BCrypt.checkpw(userPassword, savedHashedPassword)) {
+            showToast("Login erfolgreich!")
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            showToast("Falsche Anmeldeinformationen!")
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
+
