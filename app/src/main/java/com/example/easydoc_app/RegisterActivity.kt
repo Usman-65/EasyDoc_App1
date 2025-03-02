@@ -4,36 +4,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-class activity_login : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_regiter)
 
-        val username = findViewById<EditText>(R.id.etUsername)
-        val password = findViewById<EditText>(R.id.etPassword)
-        val loginButton = findViewById<Button>(R.id.btnLogin)
-        val registerText = findViewById<TextView>(R.id.tvRegister)
+        val username = findViewById<EditText>(R.id.etRegisterUsername)
+        val password = findViewById<EditText>(R.id.etRegisterPassword)
+        val registerButton = findViewById<Button>(R.id.btnRegister)
 
-        loginButton.setOnClickListener {
+        registerButton.setOnClickListener {
             val user = username.text.toString()
             val pass = password.text.toString()
 
-            if (user == "admin" && pass == "1234") {
-                val intent = Intent(this, MainActivity::class.java)
+            if (user.isNotEmpty() && pass.isNotEmpty()) {
+                Toast.makeText(this, "Registrierung erfolgreich", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
-                Toast.makeText(this, "Falscher Benutzername oder Passwort", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        registerText.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 }
