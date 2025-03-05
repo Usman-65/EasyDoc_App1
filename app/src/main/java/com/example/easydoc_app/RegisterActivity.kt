@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_regiter)
+        setContentView(R.layout.activity_register)
 
         val username = findViewById<EditText>(R.id.etRegisterUsername)
         val password = findViewById<EditText>(R.id.etRegisterPassword)
