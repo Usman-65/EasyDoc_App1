@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-</resources>
+    <color name="blue">#2196F3</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="dark_gray">#A9A9A9</color>
+    <color name="todo_bg">#FFCDD2</color> <!-- Rot -->
+    <color name="progress_bg">#FFF9C4</color> <!-- Gelb -->
+    <color name="qa_bg">#BBDEFB</color> <!-- Blau -->
+    <color name="done_bg">#C8E6C9</color> <!-- Grün -->
+    </resources>
+
