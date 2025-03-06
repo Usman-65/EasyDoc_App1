@@ -1,27 +1,31 @@
 package com.example.easydoc_app;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.easydoc_app.TaskAdapter;
+import adapter.TaskAdapter;
+import com.example.easydoc_app.data.model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class KanbanBoardActivity extends AppCompatActivity {
-    private RecyclerView recyclerTodo, recyclerInProgress, recyclerInQA, recyclerDone;
-    private TaskAdapter adapterTodo, adapterInProgress, adapterInQA, adapterDone;
-    private List<String> todoList, inProgressList, inQAList, doneList;
+    public RecyclerView recyclerTodo, recyclerInProgress, recyclerInQA, recyclerDone;
+    public TaskAdapter adapterTodo, adapterInProgress, adapterInQA, adapterDone;
+    public List<Task> todoList, inProgressList, inQAList, doneList;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getResources().getIdentifier("activity_kanban_board", "layout", getPackageName()));
+        setContentView(R.layout.activity_kanban_board);
 
-        recyclerTodo = findViewById(getResources().getIdentifier("recycler_todo", "id", getPackageName()));
-        recyclerInProgress = findViewById(getResources().getIdentifier("recycler_in_progress", "id", getPackageName()));
-        recyclerInQA = findViewById(getResources().getIdentifier("recycler_in_qa", "id", getPackageName()));
-        recyclerDone = findViewById(getResources().getIdentifier("recycler_done", "id", getPackageName()));
+        recyclerTodo = findViewById(R.id.recyclerToDo);
+        recyclerInProgress = findViewById(R.id.recyclerInProgress);
+        recyclerInQA = findViewById(R.id.recyclerInQA);
+        recyclerDone = findViewById(R.id.recyclerDone);
 
         todoList = new ArrayList<>();
         inProgressList = new ArrayList<>();
@@ -49,10 +53,10 @@ public class KanbanBoardActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        todoList.add("Task 1");
-        todoList.add("Task 2");
-        inProgressList.add("Task 3");
-        inQAList.add("Task 4");
-        doneList.add("Task 5");
+        todoList.add(new Task("Task 1", "Beschreibung für Task 1"));
+        todoList.add(new Task("Task 2", "Beschreibung für Task 2"));
+        inProgressList.add(new Task("Task 3", "Beschreibung für Task 3"));
+        inQAList.add(new Task("Task 4", "Beschreibung für Task 4"));
+        doneList.add(new Task("Task 5", "Beschreibung für Task 5"));
     }
 }

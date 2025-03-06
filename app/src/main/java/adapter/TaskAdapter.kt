@@ -1,10 +1,11 @@
-package com.example.easydoc_app
+package adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.easydoc_app.R
 import com.example.easydoc_app.data.model.Task
 
 class TaskAdapter(private val taskList: MutableList<Task>) :

@@ -1,8 +1,8 @@
 package com.example.easydoc_app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,13 +17,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapter.TaskAdapter;
+
 public class TaskManagerActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
     private EditText inputTitle, inputDescription;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
