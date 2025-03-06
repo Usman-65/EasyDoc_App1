@@ -1,18 +1,18 @@
-package com.example.easydoc_app
+package com.example.easydoc_app.adapter
 
-import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.easydoc_app.R
 import com.example.easydoc_app.data.model.Task
 
 class TaskAdapter(private val taskList: MutableList<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.simple_list_item_2, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(view)
     }
 
@@ -27,7 +27,7 @@ class TaskAdapter(private val taskList: MutableList<Task>) :
     }
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var taskTitle: TextView = itemView.findViewById(R.id.text1)
-        var taskDescription: TextView = itemView.findViewById(R.id.text2)
+        val taskTitle: TextView = itemView.findViewById(R.id.taskTitle)
+        val taskDescription: TextView = itemView.findViewById(R.id.taskDescription)
     }
 }
