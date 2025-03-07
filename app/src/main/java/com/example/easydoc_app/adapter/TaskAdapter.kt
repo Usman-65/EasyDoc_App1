@@ -1,4 +1,4 @@
-package adapter
+package com.example.easydoc_app.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +10,7 @@ import com.example.easydoc_app.data.model.Task
 
 class TaskAdapter(private val taskList: MutableList<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(view)

@@ -10,14 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easydoc_app.adapter.TaskAdapter;
 import com.example.easydoc_app.data.model.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import adapter.TaskAdapter;
 
 public class TaskManagerActivity extends AppCompatActivity {
 
