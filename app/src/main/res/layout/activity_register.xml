@@ -13,10 +13,11 @@
         android:padding="16dp">
 
         <EditText
-            android:id="@+id/etRegisterUsername"
+            android:id="@+id/etRegisterEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Neuer Benutzername"
+            android:hint="E-Mail"
+            android:inputType="textEmailAddress"
             android:padding="10dp" />
 
         <EditText

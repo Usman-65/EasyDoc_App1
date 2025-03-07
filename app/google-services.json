@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "401090850372",
+    "project_id": "easydoc-149fd",
+    "storage_bucket": "easydoc-149fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401090850372:android:c50e060eb97b6261f41611",
+        "android_client_info": {
+          "package_name": "com.example.easydoc_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAStQgHFmCRWZNeuB6HGLp3qUM5MujS80o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
