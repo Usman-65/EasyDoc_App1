@@ -38,6 +38,16 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerUser(email: String, password: String) {
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Bitte eine gültige E-Mail-Adresse eingeben", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (password.length < 6) {
+            Toast.makeText(this, "Das Passwort muss mindestens 6 Zeichen lang sein", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -53,9 +63,11 @@ class RegisterActivity : AppCompatActivity() {
                         .addOnFailureListener {
                             Toast.makeText(this, "Fehler beim Speichern der Daten", Toast.LENGTH_SHORT).show()
                         }
-            } else {
-                Toast.makeText(this, "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Firebase-spezifischen Fehler anzeigen
+                    Toast.makeText(this, "Fehler: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
-}
+
