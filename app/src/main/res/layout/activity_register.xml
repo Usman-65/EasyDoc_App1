@@ -35,6 +35,19 @@
             android:backgroundTint="@color/teal_700"
             android:padding="10dp"
             android:text="Registrieren" />
+
+        <TextView
+            android:id="@+id/tvBackToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Zurück zum Login"
+            android:textColor="@color/teal_700"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

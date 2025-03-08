@@ -56,7 +56,7 @@ class RegisterActivity : AppCompatActivity() {
 
                     db.collection("users").document(userId).set(user)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Registrierung erfolgreich", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Registrierung war erfolgreich", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, LoginActivity::class.java))
                             finish()
                         }
@@ -66,8 +66,9 @@ class RegisterActivity : AppCompatActivity() {
                 } else {
                     // Firebase-spezifischen Fehler anzeigen
                     Toast.makeText(this, "Fehler: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+
+
                 }
             }
         }
     }
-
