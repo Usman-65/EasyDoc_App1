@@ -35,7 +35,9 @@ public class TaskManagerActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         inputTitle = findViewById(R.id.inputTitle);
         inputDescription = findViewById(R.id.inputDescription);
+
         MaterialButton addTaskButton = findViewById(R.id.addTaskButton);
+        MaterialButton kanbanBoardButton = findViewById(R.id.kanbanBoardButton);
         MaterialButton logoutButton = findViewById(R.id.logoutButton);
 
         taskList = new ArrayList<>();
@@ -55,6 +57,12 @@ public class TaskManagerActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(TaskManagerActivity.this, "Task-Titel darf nicht leer sein!", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // Neuer Button: Zum Kanban Board
+        kanbanBoardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(TaskManagerActivity.this, KanbanBoardActivity.class);
+            startActivity(intent);
         });
 
         // Click Listener für den Logout-Button
