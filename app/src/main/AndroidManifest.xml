@@ -37,6 +37,10 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.EasyDoc_App" />
 
+        <!-- Hinzugefügte KanbanBoardActivity -->
+        <activity
+            android:name=".KanbanBoardActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
