@@ -2,10 +2,8 @@ package com.example.easydoc_app
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,12 +16,17 @@ import com.example.easydoc_app.ui.theme.EasyDoc_AppTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Statt setContentView(...) verwenden wir Compose:
         setContent {
             EasyDoc_AppTheme {
-                MainScreen {
-                    startActivity(Intent(this, TaskManagerActivity::class.java))
-                }
+                // Wir zeigen unsere MainScreen-Composable.
+                // Per Lambda regeln wir, was beim Button-Klick passieren soll.
+                MainScreen(
+                    onTaskManagerClick = {
+                        startActivity(Intent(this, TaskManagerActivity::class.java))
+                    }
+                )
             }
         }
     }
@@ -39,10 +42,13 @@ fun MainScreen(onTaskManagerClick: () -> Unit) {
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(text = "Willkommen bei EasyDoc!")
                 Spacer(modifier = Modifier.height(20.dp))
+
+                // Compose-Button, der zum Task Manager führt
                 Button(onClick = onTaskManagerClick) {
                     Text(text = "Zum Task Manager")
                 }

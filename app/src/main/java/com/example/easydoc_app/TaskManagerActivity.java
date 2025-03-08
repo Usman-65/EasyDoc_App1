@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class TaskManagerActivity extends AppCompatActivity {
 
-    public RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
     private EditText inputTitle, inputDescription;
@@ -34,7 +35,7 @@ public class TaskManagerActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         inputTitle = findViewById(R.id.inputTitle);
         inputDescription = findViewById(R.id.inputDescription);
-        FloatingActionButton addTaskButton = findViewById(R.id.addTaskButton);
+        MaterialButton addTaskButton = findViewById(R.id.addTaskButton);
         MaterialButton logoutButton = findViewById(R.id.logoutButton);
 
         taskList = new ArrayList<>();
@@ -56,7 +57,10 @@ public class TaskManagerActivity extends AppCompatActivity {
             }
         });
 
+        // Click Listener für den Logout-Button
         logoutButton.setOnClickListener(v -> {
+            // Falls Firebase-Logout notwendig ist:
+            // FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(TaskManagerActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
