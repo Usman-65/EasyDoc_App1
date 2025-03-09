@@ -31,6 +31,8 @@
             android:name=".RegisterActivity"
             android:exported="false" />
 
+        <activity android:name=".TaskDetailActivity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false"

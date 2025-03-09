@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.easydoc_app.data.model.Task;
+
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easydoc_app.adapter.TaskAdapter;
-import com.example.easydoc_app.data.model.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class TaskManagerActivity extends AppCompatActivity {
         MaterialButton logoutButton = findViewById(R.id.logoutButton);
 
         taskList = new ArrayList<>();
-        taskAdapter = new TaskAdapter(taskList);
+        taskAdapter = new TaskAdapter(taskList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
 
@@ -50,7 +50,7 @@ public class TaskManagerActivity extends AppCompatActivity {
             String description = inputDescription.getText().toString().trim();
 
             if (!title.isEmpty()) {
-                taskList.add(new Task(title, description));
+                taskList.add(new Task(title, description, "ToDo"));
                 taskAdapter.notifyDataSetChanged();
                 inputTitle.setText("");
                 inputDescription.setText("");

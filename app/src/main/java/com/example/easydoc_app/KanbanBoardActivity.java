@@ -6,8 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.easydoc_app.adapter.TaskAdapter;
-import com.example.easydoc_app.data.model.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.example.easydoc_app.data.model.Task;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,10 @@ public class KanbanBoardActivity extends AppCompatActivity {
 
         loadData();
 
-        adapterTodo = new TaskAdapter(todoList);
-        adapterInProgress = new TaskAdapter(inProgressList);
-        adapterInQA = new TaskAdapter(inQAList);
-        adapterDone = new TaskAdapter(doneList);
+        adapterTodo = new TaskAdapter(todoList, this);
+        adapterInProgress = new TaskAdapter(inProgressList, this);
+        adapterInQA = new TaskAdapter(inQAList, this);
+        adapterDone = new TaskAdapter(doneList, this);
 
         recyclerTodo.setLayoutManager(new LinearLayoutManager(this));
         recyclerTodo.setAdapter(adapterTodo);
@@ -57,10 +58,10 @@ public class KanbanBoardActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        todoList.add(new Task("Task 1", "Beschreibung für Task 1"));
-        todoList.add(new Task("Task 2", "Beschreibung für Task 2"));
-        inProgressList.add(new Task("Task 3", "Beschreibung für Task 3"));
-        inQAList.add(new Task("Task 4", "Beschreibung für Task 4"));
-        doneList.add(new Task("Task 5", "Beschreibung für Task 5"));
+        todoList.add(new Task("Task 1", "Beschreibung für Task 1", "ToDo"));
+        todoList.add(new Task("Task 2", "Beschreibung für Task 2", "ToDo"));
+        inProgressList.add(new Task("Task 3", "Beschreibung für Task 3", "In Progress"));
+        inQAList.add(new Task("Task 4", "Beschreibung für Task 4", "In QA"));
+        doneList.add(new Task("Task 5", "Beschreibung für Task 5", "Done"));
     }
 }
