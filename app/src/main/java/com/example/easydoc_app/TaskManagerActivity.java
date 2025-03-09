@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.view.MenuItem;
+
 import com.example.easydoc_app.data.model.Task;
-
-
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.NonNull;
 
 import com.example.easydoc_app.adapter.TaskAdapter;
 import com.google.android.material.button.MaterialButton;
@@ -35,6 +39,21 @@ public class TaskManagerActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         inputTitle = findViewById(R.id.inputTitle);
         inputDescription = findViewById(R.id.inputDescription);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, insets) -> {
+            int statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(0, statusBarHeight, 0, 0);
+            return insets;
+        });
+
+    // Zurück-Pfeil
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("EasyDoc App");
+        }
 
         MaterialButton addTaskButton = findViewById(R.id.addTaskButton);
         MaterialButton kanbanBoardButton = findViewById(R.id.kanbanBoardButton);
@@ -73,5 +92,13 @@ public class TaskManagerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
