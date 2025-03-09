@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.easydoc_app.adapter.TaskAdapter;
 import com.example.easydoc_app.data.model.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class KanbanBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kanban_board);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        topAppBar.setNavigationOnClickListener(v -> finish());
+
 
         recyclerTodo = findViewById(R.id.recyclerToDo);
         recyclerInProgress = findViewById(R.id.recyclerInProgress);
