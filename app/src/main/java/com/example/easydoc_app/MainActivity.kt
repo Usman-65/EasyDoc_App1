@@ -5,8 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,15 +19,14 @@ import com.example.easydoc_app.ui.theme.EasyDoc_AppTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Statt setContentView(...) verwenden wir Compose:
         setContent {
             EasyDoc_AppTheme {
-                // Wir zeigen unsere MainScreen-Composable.
-                // Per Lambda regeln wir, was beim Button-Klick passieren soll.
                 MainScreen(
                     onTaskManagerClick = {
                         startActivity(Intent(this, TaskManagerActivity::class.java))
+                    },
+                    onKanbanBoardClick = {
+                        startActivity(Intent(this, KanbanBoardActivity::class.java))
                     }
                 )
             }
@@ -33,34 +35,42 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(onTaskManagerClick: () -> Unit) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Willkommen bei EasyDoc!")
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Compose-Button, der zum Task Manager führt
-                Button(onClick = onTaskManagerClick) {
-                    Text(text = "Zum Task Manager")
-                }
+fun MainScreen(
+    onTaskManagerClick: () -> Unit,
+    onKanbanBoardClick: () -> Unit
+) {
+    Scaffold { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Willkommen bei EasyDoc!",
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(onClick = onTaskManagerClick, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Zum Task Manager")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onKanbanBoardClick, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Zum Kanban Board")
             }
         }
-    )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
     EasyDoc_AppTheme {
-        MainScreen {}
+        MainScreen(
+            onTaskManagerClick = {},
+            onKanbanBoardClick = {}
+        )
     }
 }
