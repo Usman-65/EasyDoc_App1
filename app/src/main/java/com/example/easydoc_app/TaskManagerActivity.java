@@ -18,16 +18,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.annotation.NonNull;
 
 import com.example.easydoc_app.adapter.TaskAdapter;
+import com.example.easydoc_app.adapter.ChecklistAdapter;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskManagerActivity extends AppCompatActivity {
+    private FirebaseFirestore db;
+    private List<Task> taskList;
 
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
-    private List<Task> taskList;
     private EditText inputTitle, inputDescription;
 
     @SuppressLint("NotifyDataSetChanged")
@@ -59,6 +67,7 @@ public class TaskManagerActivity extends AppCompatActivity {
         MaterialButton kanbanBoardButton = findViewById(R.id.kanbanBoardButton);
         MaterialButton logoutButton = findViewById(R.id.logoutButton);
 
+        db = FirebaseFirestore.getInstance();
         taskList = new ArrayList<>();
         taskAdapter = new TaskAdapter(taskList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,8 +78,18 @@ public class TaskManagerActivity extends AppCompatActivity {
             String description = inputDescription.getText().toString().trim();
 
             if (!title.isEmpty()) {
-                taskList.add(new Task(title, description, "ToDo"));
-                taskAdapter.notifyDataSetChanged();
+                Task task = new Task(title, description, "ToDo");
+
+                // Daten in Firestore speichern
+                db.collection("tasks")
+                        .add(task.toMap())  // Task in Firestore speichern
+                        .addOnSuccessListener(documentReference -> {
+                            taskList.add(task);
+                            taskAdapter.notifyDataSetChanged();
+                            Toast.makeText(TaskManagerActivity.this, "Task gespeichert!", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(TaskManagerActivity.this, "Fehler beim Speichern!", Toast.LENGTH_SHORT).show());
+
                 inputTitle.setText("");
                 inputDescription.setText("");
             } else {
@@ -101,4 +120,31 @@ public class TaskManagerActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadTasksFromFirestore();
+    }
+
+    private void loadTasksFromFirestore() {
+        db.collection("tasks").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                taskList.clear();
+                for (DocumentSnapshot document : task.getResult()) {
+                    Task loadedTask = new Task(
+                            document.getString("title"),
+                            document.getString("description"),
+                            document.getString("status")
+                    );
+                    List<String> checklist = (List<String>) document.get("checklist");
+                    if (checklist != null) {
+                        loadedTask.setChecklist(checklist);
+                    }
+                    taskList.add(loadedTask);
+                }
+                taskAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 }

@@ -13,10 +13,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.easydoc_app.data.model.Task;
+import com.example.easydoc_app.adapter.ChecklistAdapter;
 
-
+import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import android.widget.Toast;
+import com.google.firebase.firestore.DocumentReference;
+
+
 
 public class TaskDetailActivity extends AppCompatActivity {
     private EditText editTitle, editDescription;
@@ -25,12 +32,16 @@ public class TaskDetailActivity extends AppCompatActivity {
     private ChecklistAdapter checklistAdapter;
     private List<String> checklistItems;
     private Button saveButton, backButton, addChecklistItemButton;
+    private String taskId;
+    private FirebaseFirestore db;
+    private Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
+        db = FirebaseFirestore.getInstance();
         editTitle = findViewById(R.id.editTitle);
         editDescription = findViewById(R.id.editDescription);
         taskStatus = findViewById(R.id.taskStatus);
@@ -39,68 +50,61 @@ public class TaskDetailActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         addChecklistItemButton = findViewById(R.id.addChecklistItemButton);
 
-        // Beispiel-Daten abrufen (später durch echte Daten ersetzen)
-        Task task = (Task) getIntent().getSerializableExtra("task");
-        if (task != null) {
-            editTitle.setText(task.getTitle());
-            editDescription.setText(task.getDescription());
-            taskStatus.setText("Status: " + task.getStatus());
-        }
-
-
         checklistItems = new ArrayList<>();
         checklistAdapter = new ChecklistAdapter(checklistItems);
         checklistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         checklistRecyclerView.setAdapter(checklistAdapter);
 
+        // Task-Daten abrufen
+        Task task = (Task) getIntent().getSerializableExtra("task");
+        if (task != null) {
+            editTitle.setText(task.getTitle());
+            editDescription.setText(task.getDescription());
+            taskStatus.setText("Status: " + task.getStatus());
+            taskId = task.getId();
+            if (task.getChecklist() != null) {
+                checklistItems.addAll(task.getChecklist());
+                checklistAdapter.notifyDataSetChanged();
+            }
+        } else {
+            Toast.makeText(this, "Fehler: Task-Daten fehlen!", Toast.LENGTH_SHORT).show();
+            finish();
+
+        }
+
+        // Checklisten Punkt hinzufügen
         addChecklistItemButton.setOnClickListener(v -> {
             checklistItems.add("Neuer Punkt");
             checklistAdapter.notifyDataSetChanged();
         });
 
-        saveButton.setOnClickListener(v -> finish());
+        // Task speichern
+        saveButton.setOnClickListener(v -> saveTaskToFirestore());
         backButton.setOnClickListener(v -> finish());
     }
 
-    // **Inner Class für ChecklistAdapter**
-    private static class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.ViewHolder> {
-        private final List<String> checklistItems;
+    private void saveTaskToFirestore() {
+        String updatedTitle = editTitle.getText().toString().trim();
+        String updatedDescription = editDescription.getText().toString().trim();
+        List<String> updatedChecklist = checklistAdapter.getChecklistItems();
 
-        public ChecklistAdapter(List<String> checklistItems) {
-            this.checklistItems = checklistItems;
+        if (taskId == null || taskId.isEmpty()) {
+            Toast.makeText(this, "Fehler: Task-ID fehlt!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_checklist, parent, false);
-            return new ViewHolder(view);
-        }
+        Map<String, Object> updatedTask = new HashMap<>();
+        updatedTask.put("title", updatedTitle);
+        updatedTask.put("description", updatedDescription);
+        updatedTask.put("status", taskStatus.getText().toString());
+        updatedTask.put("checklist", updatedChecklist);
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            String item = checklistItems.get(position);
-            holder.checkBox.setText(item);
-            holder.deleteButton.setOnClickListener(v -> {
-                checklistItems.remove(position);
-                notifyDataSetChanged();
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return checklistItems.size();
-        }
-
-        static class ViewHolder extends RecyclerView.ViewHolder {
-            CheckBox checkBox;
-            Button deleteButton;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                checkBox = itemView.findViewById(R.id.checkBox);
-                deleteButton = itemView.findViewById(R.id.deleteButton);
-            }
-        }
+        DocumentReference taskRef = db.collection("tasks").document(taskId);
+        taskRef.update(updatedTask)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(TaskDetailActivity.this, "Task aktualisiert!", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> Toast.makeText(TaskDetailActivity.this, "Fehler beim Aktualisieren!", Toast.LENGTH_SHORT).show());
     }
 }
