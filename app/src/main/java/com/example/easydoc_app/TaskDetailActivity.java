@@ -98,7 +98,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         // Checklisten Punkt hinzufügen
         addChecklistItemButton.setOnClickListener(v -> {
-            checklistItems.add("Neuer Punkt");
+            checklistItems.add("");
             checklistAdapter.notifyDataSetChanged();
         });
 
