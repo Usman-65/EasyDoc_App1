@@ -62,15 +62,39 @@ public class TaskDetailActivity extends AppCompatActivity {
             editDescription.setText(task.getDescription());
             taskStatus.setText("Status: " + task.getStatus());
             taskId = task.getId();
+
             if (task.getChecklist() != null) {
                 checklistItems.addAll(task.getChecklist());
                 checklistAdapter.notifyDataSetChanged();
             }
-        } else {
-            Toast.makeText(this, "Fehler: Task-Daten fehlen!", Toast.LENGTH_SHORT).show();
-            finish();
-
         }
+        // Falls taskId null ist, versuchen, sie aus dem Intent zu holen
+        if (taskId == null || taskId.isEmpty()) {
+            taskId = getIntent().getStringExtra("task_id");
+        }
+
+        // Falls taskId noch immer null ist, eine Fehlermeldung anzeigen
+        if (taskId == null || taskId.isEmpty()) {
+            Toast.makeText(this, "Fehler: Task-ID fehlt!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // Falls noch keine Checklist-Daten vorhanden sind, aus Firestore laden
+        db.collection("tasks").document(taskId).get().addOnSuccessListener(document -> {
+            if (document.exists()) {
+                if (task == null) { // Falls task nicht aus Intent geladen wurde, hier setzen
+                    editTitle.setText(document.getString("title"));
+                    editDescription.setText(document.getString("description"));
+                    taskStatus.setText("Status: " + document.getString("status"));
+                }
+                List<String> checklist = (List<String>) document.get("checklist");
+                if (checklist != null) {
+                    checklistItems.addAll(checklist);
+                    checklistAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
         // Checklisten Punkt hinzufügen
         addChecklistItemButton.setOnClickListener(v -> {

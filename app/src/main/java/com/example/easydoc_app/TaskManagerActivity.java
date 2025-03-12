@@ -136,6 +136,7 @@ public class TaskManagerActivity extends AppCompatActivity {
                             document.getString("description"),
                             document.getString("status")
                     );
+                    loadedTask.setId(document.getId());
                     List<String> checklist = (List<String>) document.get("checklist");
                     if (checklist != null) {
                         loadedTask.setChecklist(checklist);

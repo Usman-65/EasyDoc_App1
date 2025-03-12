@@ -69,6 +69,9 @@ public class Task implements Serializable {
         taskMap.put("description", description);
         taskMap.put("status", status);
         taskMap.put("checklist", checklist);
+        if (id != null) {
+            taskMap.put("id", id);
+        }
         return taskMap;
     }
 }
