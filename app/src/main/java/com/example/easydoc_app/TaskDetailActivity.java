@@ -122,10 +122,25 @@ public class TaskDetailActivity extends AppCompatActivity {
                     }
                 }
                 List<String> checklist = (List<String>) document.get("checklist");
+                Map<String, Boolean> checklistState = (Map<String, Boolean>) document.get("checklistState");
+
                 if (checklist != null) {
                     checklistItems.addAll(checklist);
                     checklistAdapter.notifyDataSetChanged();
                 }
+
+                checklistRecyclerView.post(() -> {
+                    for (int i = 0; i < checklistRecyclerView.getChildCount(); i++) {
+                        View itemView = checklistRecyclerView.getChildAt(i);
+                        CheckBox checkBox = itemView.findViewById(R.id.checkBox);
+                        EditText editText = itemView.findViewById(R.id.editChecklistItem);
+
+                        if (checkBox != null && editText != null && checklistState != null) {
+                            Boolean isChecked = checklistState.get(editText.getText().toString());
+                            checkBox.setChecked(isChecked != null && isChecked); // Setzt den gespeicherten Wert oder false
+                        }
+                    }
+                });
             }
         });
 
@@ -145,6 +160,18 @@ public class TaskDetailActivity extends AppCompatActivity {
         String updatedDescription = editDescription.getText().toString().trim();
         List<String> updatedChecklist = checklistAdapter.getChecklistItems();
 
+        //CheckBox-Zustände erfassen
+        Map<String, Boolean> updatedChecklistState = new HashMap<>();
+        for (int i = 0; i < checklistRecyclerView.getChildCount(); i++) {
+            View itemView = checklistRecyclerView.getChildAt(i);
+            CheckBox checkBox = itemView.findViewById(R.id.checkBox);
+            EditText editText = itemView.findViewById(R.id.editChecklistItem);
+
+            if (checkBox != null && editText != null) {
+                updatedChecklistState.put(editText.getText().toString(), checkBox.isChecked());
+            }
+        }
+
         if (taskId == null || taskId.isEmpty()) {
             Toast.makeText(this, "Fehler: Task-ID fehlt!", Toast.LENGTH_SHORT).show();
             return;
@@ -155,6 +182,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         updatedTask.put("description", updatedDescription);
         updatedTask.put("status", selectedStatus);
         updatedTask.put("checklist", updatedChecklist);
+        updatedTask.put("checklistState", updatedChecklistState);
 
         DocumentReference taskRef = db.collection("tasks").document(taskId);
         taskRef.update(updatedTask)

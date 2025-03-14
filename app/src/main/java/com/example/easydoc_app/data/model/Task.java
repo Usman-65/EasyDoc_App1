@@ -11,6 +11,7 @@ public class Task implements Serializable {
     private String description;
     private String status;
     private List<String> checklist;
+    private Map<String, Boolean> checklistState;
     private String id;
 
     // Konstruktor
@@ -19,6 +20,7 @@ public class Task implements Serializable {
         this.description = description;
         this.status = status;
         this.checklist = new ArrayList<>();
+        this.checklistState = new HashMap<>();
     }
 
 
@@ -63,12 +65,21 @@ public class Task implements Serializable {
         this.checklist = checklist;
     }
 
+    public Map<String, Boolean> getChecklistState() {
+        return checklistState;
+    }
+
+    public void setChecklistState(Map<String, Boolean> checklistState) {
+        this.checklistState = checklistState;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("title", title);
         taskMap.put("description", description);
         taskMap.put("status", status);
         taskMap.put("checklist", checklist);
+        taskMap.put("checklistState", checklistState);
         if (id != null) {
             taskMap.put("id", id);
         }
