@@ -6,9 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.ImageButton
+
 import androidx.recyclerview.widget.RecyclerView
 import com.example.easydoc_app.R
 import com.example.easydoc_app.data.model.Task
+import com.google.firebase.firestore.FirebaseFirestore
+
+
 
 
 
@@ -49,9 +55,30 @@ class TaskAdapter(private val taskList: MutableList<Task>,
             }
             lastClickTime = clickTime
         }
+        holder.deleteTaskButton.setOnClickListener {
+            deleteTask(task, position)
+        }
     }
+
+    private fun deleteTask(task: Task, position: Int) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("tasks").document(task.id)
+            .delete()
+            .addOnSuccessListener {
+                taskList.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, taskList.size)
+                Toast.makeText(context, "Task gelöscht!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Löschen fehlgeschlagen!", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var taskTitle: TextView = itemView.findViewById(R.id.taskTitle)
         var taskDescription: TextView = itemView.findViewById(R.id.taskDescription)
+        var deleteTaskButton: ImageButton = itemView.findViewById(R.id.deleteTaskButton)
     }
 }
