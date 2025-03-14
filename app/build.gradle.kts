@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation ("com.google.android.gms:play-services-base:18.2.0")
+    implementation ("com.google.firebase:firebase-bom:32.1.0")
     implementation("com.google.firebase:firebase-firestore-ktx:24.8.1")
     implementation ("com.google.firebase:firebase-firestore:24.4.3")
     implementation("com.google.firebase:firebase-auth-ktx:22.2.0")

@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +30,6 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private EditText editTitle, editDescription;
-    private TextView taskStatus;
     private RecyclerView checklistRecyclerView;
     private ChecklistAdapter checklistAdapter;
     private List<String> checklistItems;
@@ -35,6 +37,8 @@ public class TaskDetailActivity extends AppCompatActivity {
     private String taskId;
     private FirebaseFirestore db;
     private Task task;
+    private Spinner spinnerTaskStatus;
+    private String selectedStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +48,35 @@ public class TaskDetailActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         editTitle = findViewById(R.id.editTitle);
         editDescription = findViewById(R.id.editDescription);
-        taskStatus = findViewById(R.id.taskStatus);
         checklistRecyclerView = findViewById(R.id.checklistRecyclerView);
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.backButton);
         addChecklistItemButton = findViewById(R.id.addChecklistItemButton);
+        spinnerTaskStatus = findViewById(R.id.spinnerTaskStatus);
 
         checklistItems = new ArrayList<>();
         checklistAdapter = new ChecklistAdapter(checklistItems);
         checklistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         checklistRecyclerView.setAdapter(checklistAdapter);
 
+        // Status-Optionen für das Kanban-Board
+        String[] statuses = {"ToDo", "In Progress", "In QA", "Done"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statuses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTaskStatus.setAdapter(adapter);
+
+
         // Task-Daten abrufen
         Task task = (Task) getIntent().getSerializableExtra("task");
         if (task != null) {
             editTitle.setText(task.getTitle());
             editDescription.setText(task.getDescription());
-            taskStatus.setText("Status: " + task.getStatus());
+
+            // Setze den aktuellen Status im Spinner
+            int statusPosition = adapter.getPosition(task.getStatus());
+            spinnerTaskStatus.setSelection(statusPosition);
+
             taskId = task.getId();
 
             if (task.getChecklist() != null) {
@@ -72,6 +88,19 @@ public class TaskDetailActivity extends AppCompatActivity {
         if (taskId == null || taskId.isEmpty()) {
             taskId = getIntent().getStringExtra("task_id");
         }
+
+        // Status speichern, wenn Spinner geändert wird
+        spinnerTaskStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedStatus = statuses[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedStatus = task != null ? task.getStatus() : "ToDo";
+            }
+        });
 
         // Falls taskId noch immer null ist, eine Fehlermeldung anzeigen
         if (taskId == null || taskId.isEmpty()) {
@@ -86,7 +115,11 @@ public class TaskDetailActivity extends AppCompatActivity {
                 if (task == null) { // Falls task nicht aus Intent geladen wurde, hier setzen
                     editTitle.setText(document.getString("title"));
                     editDescription.setText(document.getString("description"));
-                    taskStatus.setText("Status: " + document.getString("status"));
+
+                    if (document.getString("status") != null) {
+                        int statusPosition = adapter.getPosition(document.getString("status"));
+                        spinnerTaskStatus.setSelection(statusPosition);
+                    }
                 }
                 List<String> checklist = (List<String>) document.get("checklist");
                 if (checklist != null) {
@@ -120,7 +153,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         Map<String, Object> updatedTask = new HashMap<>();
         updatedTask.put("title", updatedTitle);
         updatedTask.put("description", updatedDescription);
-        updatedTask.put("status", taskStatus.getText().toString());
+        updatedTask.put("status", selectedStatus);
         updatedTask.put("checklist", updatedChecklist);
 
         DocumentReference taskRef = db.collection("tasks").document(taskId);

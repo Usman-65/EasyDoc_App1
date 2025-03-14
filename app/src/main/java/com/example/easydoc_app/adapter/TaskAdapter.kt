@@ -43,7 +43,8 @@ class TaskAdapter(private val taskList: MutableList<Task>,
         holder.itemView.setOnClickListener {
             val clickTime = System.currentTimeMillis()
             if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                // Doppelklick erkannt -> Wechsel zur Detailseite
+
+                // Doppelklick -> Wechsel zur Detailseite
                 val intent = Intent(context, com.example.easydoc_app.TaskDetailActivity::class.java).apply {
                     putExtra("task_id", task.getId()) // ID explizit setzen
                     putExtra("task_title", task.getTitle())
