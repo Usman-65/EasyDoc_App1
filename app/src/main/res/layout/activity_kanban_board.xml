@@ -14,10 +14,11 @@
         android:background="?attr/colorPrimary"
         android:title="Kanban Board"
         android:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_baseline_arrow_black_24"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- Guideline auf 50% der Bildschirmhöhe -->
     <androidx.constraintlayout.widget.Guideline
