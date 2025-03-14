@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.easydoc_app.adapter.TaskAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.example.easydoc_app.data.model.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class KanbanBoardActivity extends AppCompatActivity {
     public RecyclerView recyclerTodo, recyclerInProgress, recyclerInQA, recyclerDone;
     public TaskAdapter adapterTodo, adapterInProgress, adapterInQA, adapterDone;
     public List<Task> todoList, inProgressList, inQAList, doneList;
+    private FirebaseFirestore db;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,8 +41,6 @@ public class KanbanBoardActivity extends AppCompatActivity {
         inQAList = new ArrayList<>();
         doneList = new ArrayList<>();
 
-        loadData();
-
         adapterTodo = new TaskAdapter(todoList, this);
         adapterInProgress = new TaskAdapter(inProgressList, this);
         adapterInQA = new TaskAdapter(inQAList, this);
@@ -55,13 +57,54 @@ public class KanbanBoardActivity extends AppCompatActivity {
 
         recyclerDone.setLayoutManager(new LinearLayoutManager(this));
         recyclerDone.setAdapter(adapterDone);
+
+        db = FirebaseFirestore.getInstance();
+
+        setupFirestoreListener();
     }
 
-    private void loadData() {
-        todoList.add(new Task("Task 1", "Beschreibung für Task 1", "ToDo"));
-        todoList.add(new Task("Task 2", "Beschreibung für Task 2", "ToDo"));
-        inProgressList.add(new Task("Task 3", "Beschreibung für Task 3", "In Progress"));
-        inQAList.add(new Task("Task 4", "Beschreibung für Task 4", "In QA"));
-        doneList.add(new Task("Task 5", "Beschreibung für Task 5", "Done"));
+    private void setupFirestoreListener() {
+        db.collection("tasks").addSnapshotListener((querySnapshot, error) -> {
+            if (error != null || querySnapshot == null) {
+                return;
+            }
+
+            // Alle Listen leeren, um sie mit aktuellen Daten zu füllen
+            todoList.clear();
+            inProgressList.clear();
+            inQAList.clear();
+            doneList.clear();
+
+            for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                Task loadedTask = new Task(
+                        document.getString("title"),
+                        document.getString("description"),
+                        document.getString("status")
+                );
+                loadedTask.setId(document.getId());
+
+                // Aufgaben den entsprechenden Spalten zuweisen
+                switch (loadedTask.getStatus()) {
+                    case "ToDo":
+                        todoList.add(loadedTask);
+                        break;
+                    case "In Progress":
+                        inProgressList.add(loadedTask);
+                        break;
+                    case "In QA":
+                        inQAList.add(loadedTask);
+                        break;
+                    case "Done":
+                        doneList.add(loadedTask);
+                        break;
+                }
+            }
+
+            // Adapter über Änderungen informieren
+            adapterTodo.notifyDataSetChanged();
+            adapterInProgress.notifyDataSetChanged();
+            adapterInQA.notifyDataSetChanged();
+            adapterDone.notifyDataSetChanged();
+        });
     }
 }
