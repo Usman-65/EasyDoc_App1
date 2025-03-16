@@ -6,26 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f5f5f5"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
+    <!-- AppBar / Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Toolbar -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="?attr/actionBarSize"
             android:background="#007bff"
             android:elevation="4dp"
             android:title="EasyDoc App"
-            android:titleTextColor="#ffffff" />
-
+            android:titleTextColor="#ffffff"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Titel -->
@@ -37,28 +35,25 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#007bff"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp"/>
 
-    <!-- RecyclerView für die Task-Liste -->
-
-    <!-- Container für die Eingabefelder -->
-
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="408dp"
-        android:layout_height="426dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@android:color/white"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@id/inputContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintVertical_bias="0.857" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/inputContainer"
+        android:layout_marginTop="12dp"/>
 
+    <!-- Eingabefelder -->
     <LinearLayout
         android:id="@+id/inputContainer"
         android:layout_width="0dp"
@@ -87,7 +82,7 @@
             android:padding="12dp"/>
     </LinearLayout>
 
-    <!-- Container für die Aktions-Buttons (Task hinzufügen und Kanban Board) -->
+    <!-- Action Buttons -->
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
@@ -132,4 +127,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,34 +5,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     android:padding="16dp">
 
+    <!-- Titel der Aufgabe -->
     <EditText
         android:id="@+id/editTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:hint="Titel der Aufgabe"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:background="#FFFFFF"
+        android:padding="14dp"
+        android:textColor="#212121"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
+    <!-- Beschreibung der Aufgabe -->
     <EditText
         android:id="@+id/editDescription"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTitle"
-        android:layout_marginTop="64dp"
         android:hint="Beschreibung der Aufgabe"
-        android:minHeight="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:minHeight="120dp"
+        android:background="#FFFFFF"
+        android:padding="14dp"
+        android:textColor="#212121"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/editTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Status-Beschriftung -->
     <TextView
         android:id="@+id/taskStatus"
         android:layout_width="wrap_content"
@@ -40,76 +47,74 @@
         android:text="Status:"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="#333333"
         app:layout_constraintEnd_toStartOf="@id/spinnerTaskStatus"
         app:layout_constraintTop_toTopOf="@id/spinnerTaskStatus"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        android:layout_marginTop="16dp"/>
 
+    <!-- Spinner für Status -->
     <Spinner
         android:id="@+id/spinnerTaskStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@id/editDescription"
         app:layout_constraintStart_toEndOf="@id/taskStatus"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"/>
 
-
+    <!-- Checklisten RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/checklistRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/spinnerTaskStatus"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addChecklistItemButton"
+        android:layout_marginTop="24dp"/>
 
+    <!-- Button zum Hinzufügen eines neuen Checklisten-Punktes -->
     <Button
         android:id="@+id/addChecklistItemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/checklistRecyclerView"
-        android:layout_marginTop="552dp"
         android:text="Neuer Punkt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="#FFFFFF"
+        android:background="#4CAF50"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/checklistRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addChecklistItemButton"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-    </LinearLayout>
-
+    <!-- Back und Save Buttons nebeneinander -->
     <Button
         android:id="@+id/backButton"
-        android:layout_width="121dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="28dp"
-        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:text="Zurück"
+        android:textColor="#FFFFFF"
+        android:background="#FF7043"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/saveButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginBottom="24dp"/>
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="139dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="28dp"
-        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:text="Speichern"
+        android:textColor="#FFFFFF"
+        android:background="#2196F3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/backButton" />
-
+        app:layout_constraintStart_toEndOf="@id/backButton"
+        android:layout_marginBottom="24dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
